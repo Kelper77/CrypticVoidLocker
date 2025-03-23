@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YOUR SOUL IS DOOMED - PAY NOW</title>
+    <style>
+        body {
+            background: #000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 9999;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            animation: glitch 0.4s infinite;
+            margin: 10px 0;
+        }
+        p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .timer {
+            font-size: 2.2rem;
+            color: #00ff00;
+            margin: 20px 0;
+            text-shadow: 0 0 15px #00ff00;
+            animation: pulse 0.8s infinite;
+        }
+        .btc-address {
+            background: #1a0000;
+            padding: 8px;
+            font-size: 1rem;
+            color: #ffff00;
+            word-wrap: break-word;
+            max-width: 90%;
+            margin: 15px auto;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+        button {
+            background: #ff0000;
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border-radius: 5px;
+            text-shadow: 0 0 5px #fff;
+        }
+        button:hover {
+            transform: scale(1.05);
+            background: #ff4500;
+        }
+        .file-list {
+            background: #111;
+            padding: 10px;
+            max-height: 100px;
+            overflow-y: auto;
+            margin: 15px auto;
+            width: 90%;
+            border: 2px dashed #ff0000;
+            font-size: 0.9rem;
+            color: #fff;
+            text-shadow: 0 0 5px #ff0000;
+        }
+        .darkweb-feed {
+            background: #1a0000;
+            padding: 10px;
+            max-height: 80px;
+            overflow-y: auto;
+            margin: 15px auto;
+            width: 90%;
+            border: 2px solid #ff0000;
+            font-size: 0.9rem;
+            color: #ff4500;
+        }
+        .skull {
+            font-size: 4rem;
+            animation: spin 1.5s infinite linear;
+            margin: 15px 0;
+            text-shadow: 0 0 20px #ff0000;
+        }
+        .warning {
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px #ff0000;
+            animation: shake 0.1s infinite;
+        }
+        .progress {
+            width: 80%;
+            margin: 20px auto;
+            background: #222;
+            border: 2px solid #ff0000;
+            height: 25px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #8b0000);
+            transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 10px #ff0000;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(3px, -3px); } 60% { transform: translate(-3px, 0); } 80% { transform: translate(3px, 0); } 100% { transform: translate(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); }
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } 100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="skull">💀</div>
+        <h1>HELL OWNS YOU NOW</h1>
+        <p class="warning">Your soul’s ours—cam’s rolling, mic’s bleeding, demons are laughing.</p>
+        <p>Pay 1 BTC or we auction your kids on the dark web, mail your corpse pics to your mom, and burn your life to ash.</p>
+        
+        <div class="timer" id="countdown">06:00:00</div>
+        
+        <div class="progress">
+            <div class="progress-bar" id="darkWebUpload" style="width: 0%;"></div>
+        </div>
+        <p>Uploading to Dark Web: <span id="uploadPercent">0%</span></p>
+        
+        <div class="file-list" id="fakeFiles">
+            <div>DCIM/kids_birthday.jpg - UPLOADING</div>
+            <div>WhatsApp/boss_convo.db - UPLOADING</div>
+            <div>Browser/porn_history.json - UPLOADING</div>
+            <div>Gallery/private_nude.mp4 - UPLOADING</div>
+            <div>Contacts/family.vcf - UPLOADING</div>
+        </div>
+        
+        <div class="darkweb-feed" id="darkWebComments">
+            <div>@DarkLord: "Nice kid pics, bidding starts at $500!"</div>
+        </div>
+        
+        <p>Send 1 BTC to stop the demons:</p>
+        <div class="btc-address" id="btcAddress">1FuckYouPayMe666abcdefg</div>
+        
+        <p>Enter TXID or rot in hell:</p>
+        <input type="text" id="txidInput" placeholder="Bitcoin TXID" style="padding: 8px; font-size: 1rem; width: 70%; margin: 10px; border: 2px solid #ff0000; background: #111; color: #fff;">
+        <br>
+        <button onclick="checkPayment()">PAY OR BURN</button>
+        
+        <p class="warning">⏰ 6 HOURS - THE VOID IS WATCHING</p>
+    </div>
+
+    <script>
+        // Countdown timer (6 hours)
+        let timeLeft = 6 * 60 * 60;
+        const countdownElement = document.getElementById('countdown');
+
+        function updateTimer() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                document.body.innerHTML = `
+                    <div class="overlay">
+                        <h1>YOU’RE DEMON MEAT</h1>
+                        <p>Your soul’s sold. Your family’s next.</p>
+                        <div class="skull">💀💀💀</div>
+                        <p class="warning">HELL FEASTS TONIGHT</p>
+                    </div>`;
+                loudBang();
+                deathScream();
+            }
+        }
+        setInterval(updateTimer, 1000);
+
+        // Dark web upload progress
+        let uploadProgress = 0;
+        const uploadBar = document.getElementById('darkWebUpload');
+        const uploadPercent = document.getElementById('uploadPercent');
+        function updateUpload() {
+            if (uploadProgress < 100) {
+                uploadProgress += Math.random() * 3;
+                if (uploadProgress > 100) uploadProgress = 100;
+                uploadBar.style.width = `${uploadProgress}%`;
+                uploadPercent.textContent = `${Math.floor(uploadProgress)}%`;
+                heartbeat.volume = uploadProgress / 100; // Heartbeat gets louder
+                if (uploadProgress >= 25 && uploadProgress < 50) alert("25% uploaded. Your kids’ pics are live on Tor!");
+                if (uploadProgress >= 50 && uploadProgress < 75) alert("50% uploaded. Your porn’s up for auction!");
+                if (uploadProgress >= 75 && uploadProgress < 100) alert("75% uploaded. Your family’s doxxed!");
+                if (uploadProgress >= 100) {
+                    alert("UPLOAD COMPLETE. YOUR LIFE IS HELL’S NOW!");
+                    demonGirl();
+                    spookyDrops();
+                }
+            }
+        }
+        setInterval(updateUpload, 2000);
+
+        // Dark web feed simulation
+        const darkWebComments = document.getElementById('darkWebComments');
+        const comments = [
+            '@ReaperX: "Love the nudes, more please!"',
+            '@TorKing: "Bidding $1k for the kid pics!"',
+            '@HellSpawn: "Boss convo sold, thanks!"',
+            '@DarkSoul: "Your screams are next!"'
+        ];
+        let commentIndex = 1;
+        setInterval(() => {
+            if (commentIndex < comments.length) {
+                darkWebComments.innerHTML += `<div>${comments[commentIndex]}</div>`;
+                commentIndex++;
+                witchLaugh();
+            }
+        }, 10000);
+
+        // Payment check with BTC price
+        async function checkPayment() {
+            const txid = document.getElementById('txidInput').value.trim();
+            if (txid.length < 10) {
+                alert("REAL TXID OR YOUR CORPSE PICS GO TO MOM!");
+                evilCackle();
+                return;
+            }
+            document.body.innerHTML = "<h1>VERIFYING YOUR WORTHLESS SOUL...</h1>";
+            setTimeout(async () => {
+                const btcPrice = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+                    .then(res => res.json()).then(data => data.bitcoin.usd).catch(() => 60000);
+                const paid = Math.random() > 0.5;
+                if (paid) {
+                    document.body.innerHTML = `
+                        <div class="overlay">
+                            <h1>SPARED BY THE VOID</h1>
+                            <p>Uploads halted. Hell’s still watching.</p>
+                            <p>BTC: $${btcPrice.toLocaleString()}</p>
+                        </div>`;
+                } else {
+                    document.body.innerHTML = `
+                        <div class="overlay">
+                            <h1>YOU’RE DAMNED, FOOL</h1>
+                            <p>Pay 1 BTC ($${Math.round(btcPrice * 1).toLocaleString()})</p>
+                            <p class="warning">Uploading kids_birthday.jpg to Satan’s lair...</p>
+                            <button onclick="location.reload()">TRY AGAIN</button>
+                        </div>`;
+                    deathScream();
+                    evilCackle();
+                }
+            }, 4000);
+        }
+
+        // Terrifying audios from SoundBible
+        const eerieHorror = new Audio('http://soundbible.com/grab.php?id=577&type=mp3'); // Eerie Horror Scene
+        eerieHorror.loop = true;
+        eerieHorror.volume = 0.7;
+        eerieHorror.play().catch(() => {});
+
+        const heartbeat = new Audio('http://soundbible.com/grab.php?id=381&type=mp3'); // Spooky Heart Beats
+        heartbeat.loop = true;
+        heartbeat.volume = 0.1;
+        heartbeat.play().catch(() => {});
+
+        function witchLaugh() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=1129&type=mp3'); // Maniacal Witches Laugh
+            audio.volume = 0.9;
+            audio.play().catch(() => {});
+        }
+
+        function demonGirl() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=2038&type=mp3'); // Demon Girls Mockingbird
+            audio.volume = 0.8;
+            audio.play().catch(() => {});
+        }
+
+        function spookyDrops() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=380&type=mp3'); // Spooky Water Drops
+            audio.volume = 0.8;
+            audio.play().catch(() => {});
+        }
+
+        function scaryScream() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=1548&type=mp3'); // Scary Scream
+            audio.volume = 1.0;
+            audio.play().catch(() => {});
+        }
+
+        function loudBang() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=1789&type=mp3'); // Loud Bang
+            audio.volume = 1.0;
+            audio.play().catch(() => {});
+        }
+
+        function evilCackle() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=33&type=mp3'); // Evil Laugh Cackle
+            audio.volume = 0.9;
+            audio.play().catch(() => {});
+        }
+
+        function deathScream() {
+            const audio = new Audio('http://soundbible.com/grab.php?id=1570&type=mp3'); // Death
+            audio.volume = 1.0;
+            audio.play().catch(() => {});
+        }
+
+        // Random audio scares
+        setInterval(() => {
+            const rand = Math.random();
+            if (rand > 0.8) witchLaugh();
+            else if (rand > 0.6) demonGirl();
+            else if (rand > 0.4) spookyDrops();
+        }, 15000);
+
+        // Block escapes
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || e.key === 'Backspace' || e.key === 'Home' || e.key === 'Escape') {
+                e.preventDefault();
+                alert("THE DEMONS SEE YOU RUNNING!");
+                scaryScream();
+            }
+        });
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        window.addEventListener('beforeunload', e => {
+            e.preventDefault();
+            e.returnValue = "Pay or the void consumes you!";
+            scaryScream();
+            witchLaugh();
+        });
+
+        // File scroll
+        const fileList = document.getElementById('fakeFiles');
+        setInterval(() => {
+            fileList.scrollTop += 2;
+            if (fileList.scrollTop >= fileList.scrollHeight - fileList.clientHeight) fileList.scrollTop = 0;
+        }, 30);
+
+        // Random popups
+        setInterval(() => {
+            const threats = [
+                "WE’RE IN YOUR HOUSE. PAY OR WE CARVE YOUR NAME IN BLOOD!",
+                "YOUR KIDS’ VOICES ARE ON TOR NOW. 1 BTC TO SILENCE THEM!",
+                "DEMONS HAVE YOUR PORN. PAY OR IT’S ON YOUR CHURCH’S SITE!"
+            ];
+            if (Math.random() > 0.6) {
+                alert(threats[Math.floor(Math.random() * threats.length)]);
+                deathScream();
+            }
+        }, 8000);
+
+        // Fake cam/mic
+        setTimeout(() => {
+            alert("Camera live. Your screams are echoing in hell. Pay to stop!");
+            demonGirl();
+        }, 3000);
+    </script>
+</body>
+</html>
