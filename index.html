@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOUR DEVICE IS DOOMED</title>
+    <style>
+        body {
+            background: black;
+            color: red;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        h1 {
+            font-size: 40px;
+            margin: 20px;
+            text-transform: uppercase;
+            animation: flicker 0.5s infinite alternate;
+        }
+        #timer {
+            color: #0f0;
+            font-size: 30px;
+            margin: 20px;
+        }
+        #warning {
+            font-size: 20px;
+            margin: 20px;
+        }
+        #key {
+            font-size: 20px;
+            padding: 10px;
+            width: 200px;
+            background: #111;
+            color: white;
+            border: 2px solid red;
+            outline: none;
+        }
+        #btc {
+            color: yellow;
+            font-size: 16px;
+            margin: 20px;
+        }
+        #terminal {
+            background: #000;
+            color: #0f0;
+            font-size: 14px;
+            height: 150px;
+            overflow-y: auto;
+            border-top: 2px solid red;
+            padding: 10px;
+            text-align: left;
+        }
+        #jumpscare {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            z-index: 9999;
+        }
+        #jumpscare img {
+            position: absolute;
+            max-width: 80%;
+            max-height: 80%;
+            border: 2px solid red;
+        }
+        #flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: white;
+            font-size: 60px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            text-shadow: 0 0 10px red;
+        }
+        @keyframes flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(15px, -15px); }
+            50% { transform: translate(-15px, 15px); }
+            75% { transform: translate(10px, -10px); }
+        }
+        .glitch {
+            animation: shake 0.4s infinite;
+        }
+    </style>
+</head>
+<body>
+    <h1>YOUR DEVICE IS DOOMED</h1>
+    <div id="timer">TIME LEFT: 06:00:00</div>
+    <input type="password" id="key" placeholder="Enter decryption key">
+    <div id="warning">WRONG KEY = EVERYTHING DIES</div>
+    <div id="btc">SEND 10 BTC TO: 1FuckYouPayMe</div>
+    <div id="terminal"></div>
+    <div id="jumpscare"></div>
+    <div id="flash"></div>
+
+    <!-- Audio Elements -->
+    <audio id="beep" src="https://cdn.pixabay.com/audio/2022/03/24/03-11-38-458_1b8e8e8e-8e8e-4e6e-8e8e-8e8e8e8e8e8e.mp3" volume="0.5"></audio> <!-- Beep -->
+    <audio id="scream1" src="https://cdn.pixabay.com/audio/2022/03/10/audio_6e6e8e8e-8e8e-4e6e-8e8e-8e8e8e8e8e8e.mp3" volume="0.5"></audio> <!-- Scream -->
+    <audio id="scream2" src="https://www.myinstants.com/media/sounds/scream.mp3" volume="0.5"></audio> <!-- Alt Scream -->
+    <audio id="laugh" src="https://cdn.pixabay.com/audio/2022/03/10/audio_4e6e8e8e-8e8e-4e6e-8e8e-8e8e8e8e8e8e.mp3" volume="0.5"></audio> <!-- Evil Laugh -->
+    <audio id="demonScream" src="https://cdn.pixabay.com/audio/2022/03/10/audio_8e8e8e8e-8e8e-4e6e-8e8e-8e8e8e8e8e8e.mp3" volume="0.5"></audio> <!-- Demon Scream -->
+    <audio id="backgroundEvil" src="https://cdn.pixabay.com/audio/2022/03/10/audio_1e8e8e8e-8e8e-4e6e-8e8e-8e8e8e8e8e8e.mp3" loop volume="0.5"></audio> <!-- Evil Music -->
+
+    <script>
+        const timer = document.getElementById("timer");
+        const warning = document.getElementById("warning");
+        const key = document.getElementById("key");
+        const terminal = document.getElementById("terminal");
+        const jumpscare = document.getElementById("jumpscare");
+        const flash = document.getElementById("flash");
+        const beep = document.getElementById("beep");
+        const scream1 = document.getElementById("scream1");
+        const scream2 = document.getElementById("scream2");
+        const laugh = document.getElementById("laugh");
+        const demonScream = document.getElementById("demonScream");
+        const backgroundEvil = document.getElementById("backgroundEvil");
+        let timeLeft = 6 * 60 * 60; // 6 hours
+
+        // Audio and image assets
+        const sounds = [scream1, scream2, laugh, demonScream];
+        const randomSounds = [laugh, demonScream];
+        const jumpImages = [
+            "https://i.postimg.cc/wj3JChR8/Scary-PNG-Clipart.png",
+            "https://i.postimg.cc/9FLZgxMY/Scary-PNG-Isolated-Photo.png"
+        ];
+        const flashTexts = ["FEAR", "DEATH", "DOOM", "NO HOPE", "YOU'RE DOOMED", "RUN", "HIDE"];
+
+        // Start background audio and fullscreen on first click
+        document.addEventListener("click", () => {
+            backgroundEvil.play().catch(() => console.log("Audio blocked"));
+            document.documentElement.requestFullscreen().catch(() => console.log("Fullscreen blocked"));
+        }, { once: true });
+
+        // Timer chaos
+        function updateTimer() {
+            let h = Math.floor(timeLeft / 3600);
+            let m = Math.floor((timeLeft % 3600) / 60);
+            let s = timeLeft % 60;
+            timer.textContent = `TIME LEFT: ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            
+            if (Math.random() < 0.15) {
+                timer.style.color = "red";
+                beep.play().catch(() => {});
+                terminalLog("SYSTEM GLITCH DETECTED");
+            } else {
+                timer.style.color = "#0f0";
+            }
+
+            timeLeft--;
+            if (timeLeft <= 0) {
+                document.body.innerHTML = "<h1>ALL IS LOST</h1>";
+                sounds[Math.floor(Math.random() * sounds.length)].play().catch(() => {});
+                clearInterval(timerInterval);
+            }
+        }
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Key check
+        key.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                if (key.value === "letmeout") {
+                    alert("HAHA, NOPE! PAY 15 BTC OR DIE.");
+                    timeLeft = Math.min(timeLeft, 1800); // 30 mins
+                    terminalLog("DECRYPTION ATTEMPT FAILED - TIME SLASHED");
+                } else {
+                    const threats = ["CAMERA ACTIVATED", "FILES WIPING", "IP EXPOSED", "YOU’RE FUCKED"];
+                    warning.textContent = threats[Math.floor(Math.random() * threats.length)];
+                    document.body.classList.add("glitch");
+                    setTimeout(() => document.body.classList.remove("glitch"), 1000);
+                    terminalLog(`INTRUSION DETECTED: ${key.value}`);
+                    triggerFlash(flashTexts[Math.floor(Math.random() * flashTexts.length)]);
+                }
+                key.value = "";
+            }
+        });
+
+        // Terminal logs
+        function terminalLog(msg) {
+            const line = document.createElement("div");
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            if (Math.random() < 0.2) line.style.color = "red"; // 20% chance of red text
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Jumpscares every 5 seconds with random placement
+        function triggerJumpscare() {
+            const img = jumpImages[Math.floor(Math.random() * jumpImages.length)];
+            jumpscare.innerHTML = `<img src="${img}" alt="DIE">`;
+            jumpscare.style.display = "block";
+            const scareImg = jumpscare.firstChild;
+            scareImg.style.top = `${Math.random() * 100}%`;
+            scareImg.style.left = `${Math.random() * 100}%`;
+            sounds[Math.floor(Math.random() * sounds.length)].play().catch(() => {});
+            setTimeout(() => jumpscare.style.display = "none", 2500);
+            terminalLog("UNAUTHORIZED ACCESS DETECTED");
+        }
+        setInterval(triggerJumpscare, 5000);
+
+        // Flashing text
+        function triggerFlash(text) {
+            flash.textContent = text;
+            flash.style.display = "flex";
+            setTimeout(() => flash.style.display = "none", 1000);
+        }
+
+        // Random creepy sounds
+        function playRandomSound() {
+            randomSounds[Math.floor(Math.random() * randomSounds.length)].play().catch(() => {});
+            setTimeout(playRandomSound, Math.random() * 10000 + 5000); // 5-15s intervals
+        }
+        setTimeout(playRandomSound, 5000);
+
+        // Additional chaos loop
+        setInterval(() => {
+            const chaos = Math.random();
+            if (chaos < 0.5) {
+                const alerts = ["WE SEE YOU", "NO ESCAPE", "SYSTEM COMPROMISED"];
+                warning.textContent = alerts[Math.floor(Math.random() * alerts.length)];
+                setTimeout(() => warning.textContent = "WRONG KEY = EVERYTHING DIES", 2000);
+                terminalLog("SECURITY BREACH");
+            }
+            if (chaos < 0.7) triggerFlash(flashTexts[Math.floor(Math.random() * flashTexts.length)]);
+        }, 5000);
+
+        // Initial fake encryption and ongoing logs
+        const files = ["/sdcard/Pics.jpg", "/documents/secrets.pdf", "/system/core.apk"];
+        files.forEach(file => terminalLog(`ENCRYPTING ${file} -> AES-256 [FAKE]`));
+        setInterval(() => {
+            const actions = ["WIPING DISK", "LEAKING DATA", "HACKING NETWORK", "SYSTEM FAILURE", "DATA BREACH DETECTED", "YOU’RE TRAPPED"];
+            terminalLog(actions[Math.floor(Math.random() * actions.length)]);
+        }, 7000);
+    </script>
+</body>
+</html>
